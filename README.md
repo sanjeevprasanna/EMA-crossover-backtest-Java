@@ -28,25 +28,6 @@ Outputs one summary CSV in output/summary.csv
 
 Built in Java 17 + Maven
 
-📁 Folder Structure
-
-ema-crossover-backtest/
-├── data/           ← place your OHLCV CSVs here
-│   ├── AAPL.csv
-│   └── TSLA.csv
-├── output/         ← output summary will be saved here
-│   └── summary.csv
-├── src/
-│   └── main/
-│       └── java/
-│           └── net/javaguides/
-│               ├── App.java
-│               ├── backtest/Backtester.java
-│               ├── model/{Bar.java, Trade.java, Summary.java}
-│               └── indicators/EMA.java
-├── pom.xml
-└── README.md
-
 📥 Input Format
 Each file in data/ must be a CSV with this format:
 
