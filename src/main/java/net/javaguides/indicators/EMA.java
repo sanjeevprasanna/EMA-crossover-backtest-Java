@@ -7,15 +7,16 @@ public class EMA {
 
     public EMA(int period) {
         this.period = period;
-        this.multiplier = 2.0 / (period + 1);
+        this.multiplier = 2.0 / (period + 1);  // basic smoothing factor
     }
 
-    //Feed in the next price; returns current EMA 
+    // updates EMA with next price point
     public Double next(double price) {
         if (lastEma == null) {
-            lastEma = price;  // simple init
+            lastEma = price;  // init on first price
         } else {
-            lastEma = (price - lastEma) * multiplier + lastEma;//EMA FOrmula
+            // applying EMA formula
+            lastEma = lastEma + (price - lastEma) * multiplier;
         }
         return lastEma;
     }

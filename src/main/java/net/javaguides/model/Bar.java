@@ -6,12 +6,13 @@ import java.time.format.DateTimeFormatter;
 public class Bar {
     private LocalDateTime time;
     private double open, high, low, close, volume;
-    // new (day-month-year), to parse "13-07-17 09:15"
-    private static final DateTimeFormatter FMT =
-    DateTimeFormatter.ofPattern("dd-MM-yy HH:mm");
 
+    // Format: "13-07-17 09:15" -> dd-MM-yy HH:mm
+    private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm");
+
+    // Constructor - takes raw CSV fields and parses them
     public Bar(String[] f) {
-        // expects f = [timestamp, open, high, low, close, volume]
+        // expected format: [timestamp, open, high, low, close, volume]
         this.time   = LocalDateTime.parse(f[0], FMT);
         this.open   = Double.parseDouble(f[1]);
         this.high   = Double.parseDouble(f[2]);
@@ -20,6 +21,7 @@ public class Bar {
         this.volume = Double.parseDouble(f[5]);
     }
 
+    // Getter methods
     public LocalDateTime getTime() { return time; }
     public double getOpen()        { return open; }
     public double getHigh()        { return high; }
