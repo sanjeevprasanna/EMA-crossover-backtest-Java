@@ -18,14 +18,12 @@ public class Backtester {
     private static final double TAKE_PROFIT_PCT = 2.5;
     private static final LocalTime EXIT_TIME    = LocalTime.of(15, 20);
 
-    /**
-     * Runs the strategy over one CSV and returns the summary stats.
-     */
+    // Runs the strategy for each CSV and returns the summary stats.
     public static Summary runSummary(String csvPath, String stockName) throws Exception {
         List<Bar> bars = new ArrayList<>();
         try (CSVReader reader = new CSVReader(new FileReader(csvPath))) {
             String[] row;
-            reader.readNext(); // skip header
+            reader.readNext(); // skipping Column Title
             while ((row = reader.readNext()) != null)
                 bars.add(new Bar(row));
         }
@@ -37,12 +35,16 @@ public class Backtester {
         Set<LocalDate> days = new HashSet<>();
 
         for (Bar b : bars) {
+            //Start the teade only after 10.00
+            if (b.getTime().toLocalTime().isBefore(LocalTime.of(10, 0)))
+                continue;
+            
             days.add(b.getTime().toLocalDate());
             double price = b.getClose();
             Double f = emaFast.next(price), s = emaSlow.next(price);
             if (f == null || s == null) continue;
 
-            // ENTRY
+            // ENTRY-opens a new tradr
             if (prevFast != null && prevSlow != null && open == null) {
                 if (prevFast <= prevSlow && f > s)
                     open = new Trade(Side.LONG, price, b.getTime());
@@ -50,7 +52,7 @@ public class Backtester {
                     open = new Trade(Side.SHORT, price, b.getTime());
             }
 
-            // EXIT
+            // EXIT-close the trade
             if (open != null) {
                 double sl = open.getEntryPrice() *
                             (open.getSide() == Side.LONG
@@ -103,6 +105,4 @@ public class Backtester {
             winPct
         );
     }
-
-    // ... your existing run(input,output) can stay here if needed ...
 }

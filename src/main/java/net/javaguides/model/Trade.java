@@ -25,7 +25,6 @@ public class Trade {
         }
     }
 
-    // ← Add this getter:
     public double getEntryPrice() {
         return entryPrice;
     }
