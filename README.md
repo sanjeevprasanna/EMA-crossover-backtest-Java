@@ -33,7 +33,8 @@ Built in Java 17 + Maven
 Each file in data/ must be a CSV with this format:
 
 timestamp,open,high,low,close,volume
-``` 13-07-17 09:15,264.8,266.5,264.15,266.0,703982```
+
+<br>``` 13-07-17 09:15,264.8,266.5,264.15,266.0,703982```</br>
 Timestamp format: dd-MM-yy HH:mm
 
 5-minute OHLCV data per stock
@@ -43,8 +44,8 @@ Timestamp format: dd-MM-yy HH:mm
 Generates a file: output/summary.csv with columns:
 
 Stock,TradingDays,TotalTrades,Profit,WinPercent
-``` AAPL,223,1021,25012,66.66 ```
-``` TSLA,643,1211,18401,72.13  ```
+<br>``` AAPL,223,1021,25012,66.66 ```</br>
+<br>``` TSLA,643,1211,18401,72.13  ```</br>
 
 
 
