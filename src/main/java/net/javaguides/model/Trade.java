@@ -3,51 +3,46 @@ package net.javaguides.model;
 import java.time.LocalDateTime;
 
 public class Trade {
-
-    // Defines the direction of the trade
     public enum Side { LONG, SHORT }
 
     private Side side;
     private double entryPrice;
     private LocalDateTime entryTime;
+    private boolean exited = false;
+    private double exitPrice;
     private LocalDateTime exitTime;
     private double pnlPercent;
+    private double currentProfit; // Current unrealized profit
 
-    // constructor to create a new trade entry
     public Trade(Side side, double entryPrice, LocalDateTime entryTime) {
         this.side = side;
         this.entryPrice = entryPrice;
         this.entryTime = entryTime;
+        this.currentProfit = 0.0;
     }
 
-    // close the trade and calculate PnL
-    public void close(double exitPrice, LocalDateTime exitTime) {
+    public void updateCurrentProfit(double currentPrice) {
+        this.currentProfit = (side == Side.LONG)
+            ? (currentPrice / entryPrice - 1) * 100
+            : (entryPrice / currentPrice - 1) * 100;
+    }
+
+    public void markExit(double exitPrice, LocalDateTime exitTime) {
+        this.exited = true;
+        this.exitPrice = exitPrice;
         this.exitTime = exitTime;
-        if (side == Side.LONG) {
-            pnlPercent = (exitPrice / entryPrice - 1.0) * 100.0;
-        } else {
-            pnlPercent = (entryPrice / exitPrice - 1.0) * 100.0;
-        }
+        this.pnlPercent = (side == Side.LONG)
+            ? (exitPrice / entryPrice - 1) * 100
+            : (entryPrice / exitPrice - 1) * 100;
     }
 
-    // getter methods
-    public double getEntryPrice() {
-        return entryPrice;
-    }
-
-    public Side getSide() {
-        return side;
-    }
-
-    public LocalDateTime getEntryTime() {
-        return entryTime;
-    }
-
-    public LocalDateTime getExitTime() {
-        return exitTime;
-    }
-
-    public double getPnlPercent() {
-        return pnlPercent;
-    }
+    // Getters
+    public boolean isExited()           { return exited; }
+    public Side getSide()               { return side; }
+    public double getEntryPrice()       { return entryPrice; }
+    public LocalDateTime getEntryTime() { return entryTime; }
+    public double getExitPrice()        { return exitPrice; }
+    public LocalDateTime getExitTime()  { return exitTime; }
+    public double getPnlPercent()       { return pnlPercent; }
+    public double getCurrentProfit()    { return currentProfit; }
 }

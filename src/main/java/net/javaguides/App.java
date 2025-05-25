@@ -1,13 +1,8 @@
 package net.javaguides;
 
 import net.javaguides.backtest.Backtester;
-import net.javaguides.model.Summary;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 public class App {
     public static void main(String[] args) {
@@ -17,6 +12,7 @@ public class App {
             System.exit(1);
         }
 
+        // ensure output directory
         File outDir = new File("output");
         if (!outDir.exists()) outDir.mkdirs();
 
@@ -26,33 +22,30 @@ public class App {
             System.exit(1);
         }
 
-        List<Summary> list = new ArrayList<>();
         for (File f : files) {
-            String name = f.getName().replaceFirst("(?i)\\.csv$", "");
-            System.out.println("Processing " + name);
+            String stock = f.getName().replaceFirst("(?i)\\.csv$", "");
+            System.out.println("Processing " + stock);
             try {
-                Summary sum = Backtester.runSummary(f.getPath(), name);
-                list.add(sum);
+                Backtester.runBackTest(f.getPath(), stock);
             } catch (Exception e) {
-                System.err.println("Error on " + name + ": " + e.getMessage());
+                System.err.println("Error on " + stock + ": " + e.getMessage());
             }
         }
 
-        // Write summary.csv
-        try (PrintWriter pw = new PrintWriter(new FileWriter("output/summary.csv"))) {
+        // write summary.csv -OLD FORMAT
+       /*  try (PrintWriter pw = new PrintWriter(new FileWriter("output/summary.csv"))) {
             pw.println("Stock,TradingDays,TotalTrades,Profit,WinPercent");
-            for (Summary s : list) {
+            for (Summary s : summaries) {
                 pw.printf("%s,%d,%d,%.2f,%.2f%n",
-                    s.getStock(),
-                    s.getTradingDays(),
-                    s.getTotalTrades(),
-                    s.getProfitPct(),
-                    s.getWinPercent()
-                );
+                          s.getStock(),
+                          s.getTradingDays(),
+                          s.getTotalTrades(),
+                          s.getProfitPct(),
+                          s.getWinPercent());
             }
             System.out.println("Wrote summary to output/summary.csv");
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        } */
     }
 }

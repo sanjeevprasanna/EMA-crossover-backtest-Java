@@ -1,5 +1,5 @@
 package net.javaguides.model;
-
+//This Class is needed to get the output in the old format.
 public class Summary {
     private final String stock;
     private final int tradingDays;
