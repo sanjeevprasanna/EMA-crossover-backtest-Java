@@ -1,55 +1,48 @@
- EMA Crossover Backtest
 
-Backtest a 5-minute EMA-35/EMA-70 crossover trading strategy on multiple stock CSV files.
-Includes logic for entry, stop-loss, take-profit, and time-based exits — with results summarized into a single CSV report.
+# EMA Crossover Backtester
 
- Features
+A simple Java/Maven project to backtest a 5-minute EMA-35/EMA-70 crossover strategy with risk controls and time restrictions.
 
-Uses Exponential Moving Averages (EMA-35 and EMA-70)
+## Features
 
+* **EMA Periods**: Fast = 35, Slow = 70
+* **Entry Window**: Trades only open on or after 10:00 AM
+* **Exit Conditions**:
 
-Strategy:
+  * Stop Loss: 1%
+  * Take Profit: 2.5%
+  * Forced Exit: 3:20 PM
+* **Outputs**:
 
-Buy when EMA-35 crosses above EMA-70
+  * `output/orderinfo.csv`: detailed per-trade log
+  * `output/summary.csv`: aggregated results per stock
 
-Sell when EMA-35 crosses below EMA-70
+## Setup
 
-Start trade after 10.00 and end at 15.20
+1. **Requirements**:
 
+   * Java 17+
+   * Maven 3.8+
+2. **Clone** the repo and enter the project folder.
+3. **Place** your 5-minute OHLCV CSV files in `data/`.
 
-Exit at:
+## Run
 
-+2.5% profit (TP)
+```bash
+mvn clean compile exec:java
+```
 
-−1% loss (SL)
+This processes all `*.csv` in `data/`, applies the strategy, and writes:
 
+* `output/orderinfo.csv`
+* `output/summary.csv`  ```(Old Format)```
 
-Outputs one summary CSV in output/summary.csv
+## Configuration
 
-Built in Java 17 + Maven
+Edit constants in `Backtester.java`:
 
-
- Input Format
-Each file in data/ must be a CSV with this format:
-
-timestamp,open,high,low,close,volume
-
-<br>``` 13-07-17 09:15,264.8,266.5,264.15,266.0,703982```</br>
-Timestamp format: dd-MM-yy HH:mm
-
-5-minute OHLCV data per stock
-
-
- Output Summary
-Generates a file: output/summary.csv with columns:
-
-Stock,TradingDays,TotalTrades,Profit,WinPercent
-<br>``` AAPL,223,1021,25012,66.66 ```</br>
-<br>``` TSLA,643,1211,18401,72.13  ```</br>
-
-
-
-Run the Backtest
-
- ``` mvn clean compile exec:java ```
+* `ENTRY_START` (entry after time)
+* `EXIT_TIME` (forced exit time)
+* `STOP_LOSS_PCT`, `TAKE_PROFIT_PCT`
+* `EMA_FAST_PERIOD`, `EMA_SLOW_PERIOD`
 
